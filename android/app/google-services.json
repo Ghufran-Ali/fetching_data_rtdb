@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1020733351793",
+    "firebase_url": "https://iot-based-mk-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "iot-based-mk",
+    "storage_bucket": "iot-based-mk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020733351793:android:3277238b6a8365065878d0",
+        "android_client_info": {
+          "package_name": "com.example.fetching_data_rtdb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwfI4GpoHh1ibWekL6K8H6tKTMkpMLwzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
