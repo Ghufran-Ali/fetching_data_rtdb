@@ -12,7 +12,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Navigate to HomeScreen after 3 seconds
-    Timer(Duration(seconds: 9), () {
+    Timer(Duration(seconds: 3), () {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => Homescreen()));
     });
@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.yellow, // Background color
+        color: Colors.purple, // Background color
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
               // Text below the image
               Text(
                 'Medical Kiosk',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ],
           ),
