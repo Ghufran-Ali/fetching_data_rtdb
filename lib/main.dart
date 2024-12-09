@@ -2,6 +2,7 @@
 import 'package:MedicalKiosk/screens/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 //import 'package:MedicalKiosk/screens/splashscreen.dart'; // Import the splash screen
 
 
@@ -17,6 +18,7 @@ void main()async {
      databaseURL: "https://iot-based-mk-default-rtdb.asia-southeast1.firebasedatabase.app")
   );
   runApp(const MyApp());
+ // FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Medical Kiosk',
       theme: ThemeData(
       ),
 home: SplashScreen(),

@@ -592,14 +592,19 @@
 // }
 
 import 'package:MedicalKiosk/screens/aboutus.dart';
+import 'package:MedicalKiosk/screens/login.dart';
+import 'package:MedicalKiosk/screens/height.dart';
 import 'package:MedicalKiosk/screens/reference.dart';
 import 'package:MedicalKiosk/screens/bodytemperature.dart';
 import 'package:MedicalKiosk/screens/bloodpressure.dart';
 import 'package:MedicalKiosk/screens/heartrate.dart';
 import 'package:MedicalKiosk/screens/spo2.dart';
 import 'package:MedicalKiosk/screens/bmi.dart';
+import 'package:MedicalKiosk/screens/weight.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -610,6 +615,7 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   final DatabaseReference _database = FirebaseDatabase.instance.ref("Sensors");
+  final ValueNotifier <UserCredential?> userCredential=ValueNotifier(null);
 
   // State variables for sensor readings
   double _bodytemp = 0.0;
@@ -635,9 +641,9 @@ class _HomescreenState extends State<Homescreen> {
         return Colors.green;
       case 'high':
       case 'fever':
-      case 'mild fever':
-      case 'high fever':
-      case 'very high fever':
+      case 'mild':
+      case 'high':
+      case 'Severe':
       case 'obese':
       case 'overweight':
       case 'pre-hypertension':
@@ -656,9 +662,9 @@ class _HomescreenState extends State<Homescreen> {
   String _getBodyTempStatus(double temp) {
     if (temp < 95.0) return 'Low';
     if (temp >= 97.0 && temp <= 99.0) return 'Normal';
-    if (temp > 99.1 && temp <= 100.4) return 'Mild Fever';
-    if (temp > 100.4 && temp <= 103.0) return 'High Fever';
-    return 'Severe Fever';
+    if (temp > 99.1 && temp <= 100.4) return 'Mild';
+    if (temp > 100.4 && temp <= 103.0) return 'High';
+    return 'Severe';
   }
 
   // Blood pressure status
@@ -742,7 +748,6 @@ class _HomescreenState extends State<Homescreen> {
     });
   }
   
-
   @override
 Widget build(BuildContext context) {
   return Scaffold(
@@ -799,21 +804,21 @@ Widget build(BuildContext context) {
               Colors.green, Icons.height,
               () => Navigator.push(
                  context,
-            MaterialPageRoute(builder: (context) => Homescreen()),
+            MaterialPageRoute(builder: (context) => Height()),
               ),
           ),
           _buildSensorCard('Height (Inches)', _heightininches, 'in', '',
               Colors.green, Icons.height,
               () => Navigator.push(
                  context,
-            MaterialPageRoute(builder: (context) => Homescreen()),
+            MaterialPageRoute(builder: (context) => Height()),
               ),
               ),
           _buildSensorCard('Weight', _weight, 'kg', '',
               Colors.blue, Icons.fitness_center,
               () => Navigator.push(
                  context,
-            MaterialPageRoute(builder: (context) => Homescreen()),
+            MaterialPageRoute(builder: (context) => Weight()),
               ),
               ),
           _buildSensorCard('BMI', _bmi, 'kg/m²',
@@ -825,6 +830,7 @@ Widget build(BuildContext context) {
         ),
         ],
       ),
+      //backgroundColor: Colors.black,
       drawer: Drawer(
   child: Container(
     color: Colors.white,
@@ -836,19 +842,17 @@ Widget build(BuildContext context) {
             color: Colors.purple,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // Align items to the start
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              
-              //SizedBox(height: 5),
               Row(
                 children: [
                   Image.asset(
-                    'assets/images/logo.png', // Replace with your logo's path
-                    height: 80, // Adjust size as needed
+                    'assets/images/logo.png',
+                    height: 80,
                     width: 80,
                   ),
-                  SizedBox(width: 10), // Add space between logo and text
+                  SizedBox(width: 10),
                 ],
               ),
               Text(
@@ -872,38 +876,55 @@ Widget build(BuildContext context) {
             );
           },
         ),
-        // Reference Screen Drawer Item
         ListTile(
           leading: Icon(Icons.book),
           title: Text('Reference'),
           onTap: () {
-            // Navigate to the Reference screen here
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => Reference()), // Replace with your Reference screen widget
+              MaterialPageRoute(builder: (context) => Reference()),
             );
           },
         ),
-        //ListTile(
-          //leading: Icon(Icons.settings),
-          //title: Text('Settings'),
-         // onTap: () {},
-        //),
         ListTile(
-          leading: Icon(Icons.info), // Optional: Use a relevant icon
+          leading: Icon(Icons.info),
           title: Text('About Us'),
           onTap: () {
-            // Add the action you want to perform when tapped
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => Aboutus()),
             );
           },
         ),
+        ListTile(
+          leading: Icon(Icons.logout),
+          title: Text('Sign Out'),
+          onTap: () async {
+            try {
+              // Firebase and Google Sign-Out logic
+              await FirebaseAuth.instance.signOut();
+              await GoogleSignIn().signOut();
+
+              // Navigate to Login Screen
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            } catch (e) {
+              // Error handling during sign-out
+              print('Error signing out: $e');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error during Sign-Out')),
+              );
+            }
+          },
+        ),
       ],
     ),
   ),
 ),
+
+
 
     );
   }

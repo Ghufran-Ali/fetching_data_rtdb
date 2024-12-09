@@ -1,18 +1,20 @@
-import 'package:MedicalKiosk/screens/aboutus.dart';
 import 'package:MedicalKiosk/screens/homescreen.dart';
 import 'package:MedicalKiosk/screens/login.dart';
+import 'package:MedicalKiosk/screens/reference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+//import 'package:MedicalKiosk/screens/bodytemperature.dart';
+import 'package:MedicalKiosk/screens/aboutus.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class Reference extends StatelessWidget {
+class Height extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: const Text(
-          "Reference",
+          "Height Details",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -20,53 +22,69 @@ class Reference extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white), // Back arrow icon
+          onPressed: () {
+            Navigator.pop(context); // Navigate to the previous screen
+          },
+        ),
         iconTheme: IconThemeData(
           color: Colors.white, // Set drawer bars (hamburger icon) color to white
         ),
       ),
       body: SingleChildScrollView(
-        child: Center(  // Wrap with Center widget
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.9, // 90% of the screen width
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3), // Shadow position
-                ),
-              ],
-            ),
-            margin: EdgeInsets.all(10),
-            child: RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'The health parameters and their ranges provided are based on widely accepted medical standards, including those from the World Health Organization (WHO) and other trusted health organizations. These ranges are general guidelines and may vary based on individual circumstances. For detailed and personalized health advice, it is always recommended to consult a healthcare professional.',
-                    style: TextStyle(fontSize: 19, color: Colors.black), // Bold text
-                  ),
-                  TextSpan(
-                    text: '\n\n Reference: ',
-                    style: TextStyle(fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                    text: 'World Health Organization (WHO)\n\n',
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                  ),
-                  TextSpan(
-                    text: 'https://www.who.int/',
-                    style: TextStyle(fontSize: 19, color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-          ),
+  child: Container(
+    padding: const EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 2,
+          blurRadius: 5,
+          offset: Offset(0, 3), // Shadow position
         ),
-      ),
+      ],
+    ),
+    margin: EdgeInsets.all(10),
+    child: RichText(
+    text: TextSpan(
+      children: <TextSpan>[
+        TextSpan(
+          text: 'Height is a key anthropometric measurement used to assess growth, development, and nutritional status. Height is also an important factor for calculating BMI.',
+          style: TextStyle(fontSize: 19, color: Colors.black),
+        ),
+        TextSpan(
+          text: '\n\n- Normal Growth Patterns in Adults: ',
+          style: TextStyle(fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold), // Bold text
+        ),
+        TextSpan(
+          text: '\n   Average height for adult males: ',
+          style: TextStyle(fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold), // Bold text
+        ),
+        TextSpan(
+          text: '170 cm (5 ft 7 in) worldwide (varies by region).\n',
+          style: TextStyle(fontSize: 19, color: Colors.black),
+        ),
+        TextSpan(
+          text: '\n   Average height for adult females: ',
+          style: TextStyle(fontSize: 19, color: Colors.black, fontWeight: FontWeight.bold), // Bold text
+        ),
+        TextSpan(
+          text: '160 cm (5 ft 3 in) worldwide (varies by region).\n',
+          style: TextStyle(fontSize: 19, color: Colors.black),
+        ),
+        TextSpan(
+          text: '\n   Growth stops after the late teenage years in most individuals.\n',
+          style: TextStyle(fontSize: 19, color: Colors.black), // Bold text
+        ),
+      ],
+    ),
+  ),
+  ),
+),
+
       drawer: Drawer(
   child: Container(
     color: Colors.white,

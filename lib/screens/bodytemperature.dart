@@ -1,8 +1,11 @@
 import 'package:MedicalKiosk/screens/homescreen.dart';
+import 'package:MedicalKiosk/screens/login.dart';
 import 'package:MedicalKiosk/screens/reference.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:MedicalKiosk/screens/bodytemperature.dart';
 import 'package:MedicalKiosk/screens/aboutus.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Bodytemperature extends StatelessWidget {
   @override
@@ -99,75 +102,97 @@ class Bodytemperature extends StatelessWidget {
 ),
 
       drawer: Drawer(
-        child: Container(
-          color: Colors.white,
-          child: ListView(
-            padding: EdgeInsets.zero,
+  child: Container(
+    color: Colors.white,
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        DrawerHeader(
+          decoration: BoxDecoration(
+            color: Colors.purple,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.purple,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, // Align items to the start
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/logo.png', // Replace with your logo's path
-                          height: 80, // Adjust size as needed
-                          width: 80,
-                        ),
-                        SizedBox(width: 10), // Add space between logo and text
-                      ],
-                    ),
-                    Text(
-                      'Medical Kiosk',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/images/logo.png',
+                    height: 80,
+                    width: 80,
+                  ),
+                  SizedBox(width: 10),
+                ],
               ),
-              ListTile(
-                leading: Icon(Icons.home),
-                title: Text('Home'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Homescreen()),
-                  );
-                },
-              ),
-              ListTile(
-          leading: Icon(Icons.book),
-          title: Text('Reference'),
-          onTap: () {
-            // Navigate to the Reference screen here
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => Reference()), // Replace with your Reference screen widget
-            );
-          },
-        ),
-              ListTile(
-                leading: Icon(Icons.info), // Optional: Use a relevant icon
-                title: Text('About Us'),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Aboutus()),
-                  );
-                },
+              Text(
+                'Medical Kiosk',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
         ),
-      ),
+        ListTile(
+          leading: Icon(Icons.home),
+          title: Text('Home'),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Homescreen()),
+            );
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.book),
+          title: Text('Reference'),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Reference()),
+            );
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.info),
+          title: Text('About Us'),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Aboutus()),
+            );
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.logout),
+          title: Text('Sign Out'),
+          onTap: () async {
+            try {
+              // Firebase and Google Sign-Out logic
+              await FirebaseAuth.instance.signOut();
+              await GoogleSignIn().signOut();
+
+              // Navigate to Login Screen
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            } catch (e) {
+              // Error handling during sign-out
+              print('Error signing out: $e');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error during Sign-Out')),
+              );
+            }
+          },
+        ),
+      ],
+    ),
+  ),
+),
     );
   }
 }
