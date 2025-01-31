@@ -591,6 +591,401 @@
 //   }
 // }
 
+//MK3 without responsive
+
+// import 'package:MedicalKiosk/screens/aboutus.dart';
+// import 'package:MedicalKiosk/screens/login.dart';
+// import 'package:MedicalKiosk/screens/height.dart';
+// import 'package:MedicalKiosk/screens/reference.dart';
+// import 'package:MedicalKiosk/screens/bodytemperature.dart';
+// import 'package:MedicalKiosk/screens/bloodpressure.dart';
+// import 'package:MedicalKiosk/screens/heartrate.dart';
+// import 'package:MedicalKiosk/screens/spo2.dart';
+// import 'package:MedicalKiosk/screens/bmi.dart';
+// import 'package:MedicalKiosk/screens/weight.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_database/firebase_database.dart';
+// import 'package:flutter/material.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+
+// class Homescreen extends StatefulWidget {
+//   const Homescreen({super.key});
+
+//   @override
+//   State<Homescreen> createState() => _HomescreenState();
+// }
+
+// class _HomescreenState extends State<Homescreen> {
+//   final DatabaseReference _database = FirebaseDatabase.instance.ref("Sensors");
+//   final ValueNotifier <UserCredential?> userCredential=ValueNotifier(null);
+
+//   // State variables for sensor readings
+//   double _bodytemp = 0.0;
+//   double _dbp = 0.0;
+//   double _heartrate = 0.0;
+//   double _spo2 = 0.0;
+//   double _bmi = 0.0;
+//   double _weight = 0.0;
+//   double _heightinfeet = 0.0;
+//   double _heightininches = 0.0;
+
+//   // State variables for health status
+//   String _bodyTempStatus = 'Normal';
+//   String _bloodpresureStatus = 'Normal';
+//   String _heartRateStatus = 'Normal';
+//   String _spo2Status = 'Normal';
+//   String _bmiStatus = 'Normal';
+//   String _weightStatus = 'Normal';
+
+//   Color _getStatusColor(String status) {
+//     switch (status.toLowerCase()) {
+//       case 'normal':
+//         return Colors.green;
+//       case 'high':
+//       case 'fever':
+//       case 'mild':
+//       case 'high':
+//       case 'Severe':
+//       case 'obese':
+//       case 'overweight':
+//       case 'pre-hypertension':
+//         return Colors.red;
+//       case 'low':
+//       case 'underweight':
+//         return Colors.orange;
+//       case 'moderate':
+//         return Colors.yellow;
+//       default:
+//         return Colors.black;
+//     }
+//   }
+
+//   // Body temperature status
+//   String _getBodyTempStatus(double temp) {
+//     if (temp < 95.0) return 'Low';
+//     if (temp >= 97.0 && temp <= 99.0) return 'Normal';
+//     if (temp > 99.1 && temp <= 100.4) return 'Mild';
+//     if (temp > 100.4 && temp <= 103.0) return 'High';
+//     return 'Severe';
+//   }
+
+//   // Blood pressure status
+//   String _getBloodPressureStatus(double dbp) {
+//     if (dbp < 60) return 'Low';
+//     if (dbp >= 60 && dbp <= 80) return 'Normal';
+//     if (dbp > 80 && dbp <= 90) return 'Pre-Hypertension';
+//     return 'High';
+//   }
+
+//   // Heart rate status
+//   String _getHeartRateStatus(double heartRate) {
+//     if (heartRate < 60) return 'Low';
+//     if (heartRate >= 60 && heartRate <= 100) return 'Normal';
+//     return 'High';
+//   }
+
+//   // SpO2 status
+//   String _getSpO2Status(double spo2) {
+//     if (spo2 < 90) return 'Low';
+//     if (spo2 >= 90 && spo2 < 95) return 'Moderate';
+//     if (spo2 >= 95 && spo2 <= 100) return 'Normal';
+//     return 'High';
+//   }
+
+//   // Weight status ranges in kg
+//   String _getWeightStatus(double weight) {
+//     if (weight < 45) return 'Underweight';
+//     if (weight >= 45 && weight < 75) return 'Normal';
+//     if (weight >= 75 && weight < 90) return 'Overweight';
+//     return 'Obese';
+//   }
+
+//   // BMI status BMI ranges
+//   String _getBMIStatus(double bmi) {
+//     if (bmi < 18.5) return 'Underweight';
+//     if (bmi >= 18.5 && bmi < 25) return 'Normal';
+//     if (bmi >= 25 && bmi < 30) return 'Overweight';
+//     return 'Obese';
+//   }
+
+//   // Initializing the database for incoming value
+//   @override
+//   void initState() {
+//     super.initState();
+//     _database.onValue.listen((DatabaseEvent event) {
+//       final dynamic data = event.snapshot.value;
+//       if (data != null && data is Map) {
+//         setState(() {
+//           _bodytemp =
+//               double.tryParse(data['Body_Temp']?.toString() ?? '0') ?? 0.0;
+//           _dbp = double.tryParse(data['DBP']?.toString() ?? '0') ?? 0.0;
+//           _heartrate =
+//               double.tryParse(data['Heart_Rate']?.toString() ?? '0') ?? 0.0;
+//           _spo2 = double.tryParse(data['SpO2']?.toString() ?? '0') ?? 0.0;
+//           _bmi = double.tryParse(data['BMI']?.toString() ?? '0') ?? 0.0;
+//           _weight = double.tryParse(data['Weight']?.toString() ?? '0') ?? 0.0;
+//           _heightinfeet =
+//               double.tryParse(data['HeightInFeet']?.toString() ?? '0') ?? 0.0;
+//           _heightininches =
+//               double.tryParse(data['HeightInInches']?.toString() ?? '0') ?? 0.0;
+
+//           _bodyTempStatus = _getBodyTempStatus(_bodytemp);
+//           _bloodpresureStatus = _getBloodPressureStatus(_dbp);
+//           _heartRateStatus = _getHeartRateStatus(_heartrate);
+//           _spo2Status = _getSpO2Status(_spo2);
+//           _weightStatus =
+//               _getWeightStatus(_weight); // Make sure this is using _weight
+//           _bmiStatus = _getBMIStatus(_bmi);
+
+//           print('Data updated: BodyTemp:$_bodytemp ($_bodyTempStatus), '
+//               'DBP:$_dbp ($_bloodpresureStatus), '
+//               'HeartRate:$_heartrate ($_heartRateStatus), '
+//               'SpO2:$_spo2 ($_spo2Status), '
+//               'BMI:$_bmi ($_bmiStatus), '
+//               'Weight:$_weight ($_weightStatus)');
+//         });
+//       }
+//     }, onError: (error) {
+//       print('Database error: $error');
+//     });
+//   }
+  
+//   @override
+// Widget build(BuildContext context) {
+//   return Scaffold(
+//     appBar: AppBar(
+//         backgroundColor: Colors.purple,
+//         title: const Text(
+//           "IOT BASED MEDICAL KIOSK",
+//           style: TextStyle(
+//             color: Colors.white,
+//             fontWeight: FontWeight.bold,
+//             fontSize: 18.0,
+//           ),
+//         ),
+//         centerTitle: true,
+//         iconTheme: IconThemeData(
+//     color: Colors.white, // Set drawer bars (hamburger icon) color to white
+//   ),
+//       ),
+//       body: GridView.count(
+//         crossAxisCount: 2,
+//         crossAxisSpacing: 10,
+//         mainAxisSpacing: 10,
+//         padding: const EdgeInsets.all(10),
+//         children: [
+//           _buildSensorCard('Body Temperature', _bodytemp,'°F', 
+//           _bodyTempStatus, _getStatusColor(_bodyTempStatus), Icons.thermostat,
+//           () => Navigator.push(
+//             context,
+//             MaterialPageRoute(builder: (context) => Bodytemperature()),
+//           ),
+//         ),
+//           _buildSensorCard('Blood Pressure (DBP)', _dbp, 'mmHg',
+//           _bloodpresureStatus, _getStatusColor(_bloodpresureStatus), Icons.monitor_heart,
+//           () => Navigator.push(
+//             context,
+//             MaterialPageRoute(builder: (context) => Bloodpressure()),
+//           ),
+//         ),
+//           _buildSensorCard('Heart Rate', _heartrate, 'bpm',
+//           _heartRateStatus, _getStatusColor(_heartRateStatus), Icons.favorite,
+//           () => Navigator.push(
+//             context,
+//             MaterialPageRoute(builder: (context) => Heartrate()),
+//           ),
+//         ),
+//           _buildSensorCard('SpO2', _spo2, '%',
+//           _spo2Status, _getStatusColor(_spo2Status), Icons.air,
+//           () => Navigator.push(
+//             context,
+//             MaterialPageRoute(builder: (context) => Spo2()),
+//           ),
+//         ),
+//           _buildSensorCard('Height (Feet)', _heightinfeet, 'ft', '',
+//               Colors.green, Icons.height,
+//               () => Navigator.push(
+//                  context,
+//             MaterialPageRoute(builder: (context) => Height()),
+//               ),
+//           ),
+//           _buildSensorCard('Height (Inches)', _heightininches, 'in', '',
+//               Colors.green, Icons.height,
+//               () => Navigator.push(
+//                  context,
+//             MaterialPageRoute(builder: (context) => Height()),
+//               ),
+//               ),
+//           _buildSensorCard('Weight', _weight, 'kg', '',
+//               Colors.blue, Icons.fitness_center,
+//               () => Navigator.push(
+//                  context,
+//             MaterialPageRoute(builder: (context) => Weight()),
+//               ),
+//               ),
+//           _buildSensorCard('BMI', _bmi, 'kg/m²',
+//           _bmiStatus, _getStatusColor(_bmiStatus), Icons.calculate,
+//           () => Navigator.push(
+//             context,
+//             MaterialPageRoute(builder: (context) => Bmi()),
+//           ),
+//         ),
+//         ],
+//       ),
+//       //backgroundColor: Colors.black,
+//       drawer: Drawer(
+//   child: Container(
+//     color: Colors.white,
+//     child: ListView(
+//       padding: EdgeInsets.zero,
+//       children: [
+//         DrawerHeader(
+//           decoration: BoxDecoration(
+//             color: Colors.purple,
+//           ),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               Row(
+//                 children: [
+//                   Image.asset(
+//                     'assets/images/logo.png',
+//                     height: 80,
+//                     width: 80,
+//                   ),
+//                   SizedBox(width: 10),
+//                 ],
+//               ),
+//               Text(
+//                 'Medical Kiosk',
+//                 style: TextStyle(
+//                   color: Colors.white,
+//                   fontSize: 24,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         ListTile(
+//           leading: Icon(Icons.home),
+//           title: Text('Home'),
+//           onTap: () {
+//             Navigator.pushReplacement(
+//               context,
+//               MaterialPageRoute(builder: (context) => Homescreen()),
+//             );
+//           },
+//         ),
+//         ListTile(
+//           leading: Icon(Icons.book),
+//           title: Text('Reference'),
+//           onTap: () {
+//             Navigator.pushReplacement(
+//               context,
+//               MaterialPageRoute(builder: (context) => Reference()),
+//             );
+//           },
+//         ),
+//         ListTile(
+//           leading: Icon(Icons.info),
+//           title: Text('About Us'),
+//           onTap: () {
+//             Navigator.pushReplacement(
+//               context,
+//               MaterialPageRoute(builder: (context) => Aboutus()),
+//             );
+//           },
+//         ),
+//         ListTile(
+//           leading: Icon(Icons.logout),
+//           title: Text('Sign Out'),
+//           onTap: () async {
+//             try {
+//               // Firebase and Google Sign-Out logic
+//               await FirebaseAuth.instance.signOut();
+//               await GoogleSignIn().signOut();
+
+//               // Navigate to Login Screen
+//               Navigator.pushReplacement(
+//                 context,
+//                 MaterialPageRoute(builder: (context) => LoginScreen()),
+//               );
+//             } catch (e) {
+//               // Error handling during sign-out
+//               print('Error signing out: $e');
+//               ScaffoldMessenger.of(context).showSnackBar(
+//                 SnackBar(content: Text('Error during Sign-Out')),
+//               );
+//             }
+//           },
+//         ),
+//       ],
+//     ),
+//   ),
+// ),
+
+
+
+//     );
+//   }
+
+//  Widget _buildSensorCard(String label, double value, String unit, String status,
+//       Color statusColor, IconData icon, VoidCallback onTap) {
+//     return GestureDetector(
+//       onTap: onTap,
+//       child: Card(
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(10),
+//         ),
+//         elevation: 4,
+//         child: Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               Icon(
+//                 icon,
+//                 size: 50,
+//                 color: statusColor,
+//               ),
+//               const SizedBox(height: 8),
+//               Text(
+//                 label,
+//                 style: const TextStyle(
+//                   fontSize: 15,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//                 textAlign: TextAlign.center,
+//               ),
+//               const SizedBox(height: 3),
+//               Text(
+//                 '$value $unit',
+//                 style: const TextStyle(
+//                   fontSize: 16,
+//                   color: Colors.blue,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//               if (status.isNotEmpty)
+//                 Text(
+//                   status,
+//                   style: TextStyle(
+//                     fontSize: 15,
+//                     color: statusColor,
+//                     fontWeight: FontWeight.w500,
+//                   ),
+//                 ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
 import 'package:MedicalKiosk/screens/aboutus.dart';
 import 'package:MedicalKiosk/screens/login.dart';
 import 'package:MedicalKiosk/screens/height.dart';
@@ -750,6 +1145,9 @@ class _HomescreenState extends State<Homescreen> {
   
   @override
 Widget build(BuildContext context) {
+  final double screenWidth = MediaQuery.of(context).size.width;
+  final double cardHeight = screenWidth / 2.5; // Dynamic card height
+
   return Scaffold(
     appBar: AppBar(
         backgroundColor: Colors.purple,
@@ -766,11 +1164,19 @@ Widget build(BuildContext context) {
     color: Colors.white, // Set drawer bars (hamburger icon) color to white
   ),
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        padding: const EdgeInsets.all(10),
+      body: LayoutBuilder(
+      builder: (context, constraints) {
+        return GridView.count(
+          // crossAxisCount: constraints.maxWidth > 600 ? 3 : 2, // Adjust columns based on screen width
+          // crossAxisSpacing: 10,
+          // mainAxisSpacing: 10,
+          // padding: const EdgeInsets.all(10),
+          // childAspectRatio: 1, // Ensures cards are square or slightly rectangular
+          crossAxisCount: constraints.maxWidth > 600 ? 2 : 2,
+          crossAxisSpacing: constraints.maxWidth * 0.02, // Scaled spacing
+          mainAxisSpacing: constraints.maxWidth * 0.02, // Scaled spacing
+          padding: EdgeInsets.all(constraints.maxWidth * 0.02), // Scaled padding
+          childAspectRatio: constraints.maxWidth > 600 ? 1.1 : 1, // Adjust aspect ratio
         children: [
           _buildSensorCard('Body Temperature', _bodytemp,'°F', 
           _bodyTempStatus, _getStatusColor(_bodyTempStatus), Icons.thermostat,
@@ -778,6 +1184,7 @@ Widget build(BuildContext context) {
             context,
             MaterialPageRoute(builder: (context) => Bodytemperature()),
           ),
+          cardHeight,
         ),
           _buildSensorCard('Blood Pressure (DBP)', _dbp, 'mmHg',
           _bloodpresureStatus, _getStatusColor(_bloodpresureStatus), Icons.monitor_heart,
@@ -785,6 +1192,7 @@ Widget build(BuildContext context) {
             context,
             MaterialPageRoute(builder: (context) => Bloodpressure()),
           ),
+          cardHeight,
         ),
           _buildSensorCard('Heart Rate', _heartrate, 'bpm',
           _heartRateStatus, _getStatusColor(_heartRateStatus), Icons.favorite,
@@ -792,6 +1200,7 @@ Widget build(BuildContext context) {
             context,
             MaterialPageRoute(builder: (context) => Heartrate()),
           ),
+          cardHeight,
         ),
           _buildSensorCard('SpO2', _spo2, '%',
           _spo2Status, _getStatusColor(_spo2Status), Icons.air,
@@ -799,6 +1208,7 @@ Widget build(BuildContext context) {
             context,
             MaterialPageRoute(builder: (context) => Spo2()),
           ),
+          cardHeight,
         ),
           _buildSensorCard('Height (Feet)', _heightinfeet, 'ft', '',
               Colors.green, Icons.height,
@@ -806,6 +1216,7 @@ Widget build(BuildContext context) {
                  context,
             MaterialPageRoute(builder: (context) => Height()),
               ),
+              cardHeight,
           ),
           _buildSensorCard('Height (Inches)', _heightininches, 'in', '',
               Colors.green, Icons.height,
@@ -813,6 +1224,7 @@ Widget build(BuildContext context) {
                  context,
             MaterialPageRoute(builder: (context) => Height()),
               ),
+              cardHeight,
               ),
           _buildSensorCard('Weight', _weight, 'kg', '',
               Colors.blue, Icons.fitness_center,
@@ -820,6 +1232,7 @@ Widget build(BuildContext context) {
                  context,
             MaterialPageRoute(builder: (context) => Weight()),
               ),
+              cardHeight,
               ),
           _buildSensorCard('BMI', _bmi, 'kg/m²',
           _bmiStatus, _getStatusColor(_bmiStatus), Icons.calculate,
@@ -827,8 +1240,11 @@ Widget build(BuildContext context) {
             context,
             MaterialPageRoute(builder: (context) => Bmi()),
           ),
+          cardHeight,
         ),
         ],
+      );
+      }
       ),
       //backgroundColor: Colors.black,
       drawer: Drawer(
@@ -929,8 +1345,15 @@ Widget build(BuildContext context) {
     );
   }
 
- Widget _buildSensorCard(String label, double value, String unit, String status,
-      Color statusColor, IconData icon, VoidCallback onTap) {
+ Widget _buildSensorCard(String label, dynamic  value, String unit, String status,
+      Color statusColor, IconData icon, VoidCallback onTap, double cardHeight) {
+        return LayoutBuilder(
+    builder: (context, constraints) {
+      double iconSize = constraints.maxWidth * 0.25; // Scale icon size
+      double labelFontSize = constraints.maxWidth * 0.09; // Scale label font size
+      double valueFontSize = constraints.maxWidth * 0.10; // Scale value font size
+      double statusFontSize = constraints.maxWidth * 0.08; // Scale status font size
+
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -939,38 +1362,46 @@ Widget build(BuildContext context) {
         ),
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          //padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(constraints.maxWidth * 0.05), // Scale padding
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 icon,
-                size: 50,
+                //size: 50,
+                size: iconSize,
                 color: statusColor,
               ),
-              const SizedBox(height: 8),
+              //const SizedBox(height: 8),
+              SizedBox(height: constraints.maxWidth * 0.02), // Scaled spacing
               Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 15,
+                style: TextStyle(
+                  //fontSize: 15,
+                  fontSize: labelFontSize, // Use titleFontSize
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 3),
+              //const SizedBox(height: 3),
+               SizedBox(height: constraints.maxWidth * 0.01),
               Text(
                 '$value $unit',
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  //fontSize: 16,
+                  fontSize: valueFontSize, // Use valueFontSize
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               if (status.isNotEmpty)
+              SizedBox(height: constraints.maxWidth * 0.01),
                 Text(
                   status,
                   style: TextStyle(
-                    fontSize: 15,
+                    //fontSize: 15,
+                    fontSize: statusFontSize, // Use statusFontSize
                     color: statusColor,
                     fontWeight: FontWeight.w500,
                   ),
@@ -980,9 +1411,7 @@ Widget build(BuildContext context) {
         ),
       ),
     );
+    },
+  );
   }
 }
-
-
-
-
